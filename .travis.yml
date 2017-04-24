@@ -1,0 +1,8 @@
+language: c
+script:
+  - gcc src/main.c -o textSoup
+  - ./textsoup
+  - gcov src/main.c
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
