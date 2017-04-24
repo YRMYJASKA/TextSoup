@@ -1,6 +1,6 @@
 language: c
 script:
-  - gcc src/main.c -o textSoup
+  - make
   - ./textsoup
   - gcov src/main.c
 
