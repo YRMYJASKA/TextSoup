@@ -1,7 +1,7 @@
 language: c
 script:
   - make
-  - ./textsoup
+#  - ./textsoup
   - gcov src/main.c
 
 after_success:
