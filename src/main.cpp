@@ -28,7 +28,7 @@ int MAX_X, MAX_Y; // Window's current dimensions
 int CURS_X = 0, CURS_Y = 0; // Cursor's position
 int key; // The value of the key presses is stored into 'int key'
 FILE* ofile;
-String fileName = ""; // Name of the file
+string fileName = ""; // Name of the file
 int main(int argc, char *argv[]){
 	
 	if(argc > 1){
