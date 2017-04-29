@@ -12,39 +12,59 @@
 *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *    GNU General Public License for more details.
 */
-#include <stdio.h>
+
+// main.cpp
+
+// Include the libraries
+#include <iostream>
+#include <string.h>
 #include <ncurses.h>
 #include <unistd.h>
+#include <stdlib.h>
 
-// Functions
-int mainLoop();
-// Important "constants"
-int MAX_X, MAX_Y;
-int CURS_X, CURS_Y;
-int running = 1;
-char key;
+using namespace std;
+// Important variables
+int MAX_X, MAX_Y; // Window's current dimensions
+int CURS_X = 0, CURS_Y = 0; // Cursor's position
+int key; // The value of the key presses is stored into 'int key'
 FILE* ofile;
+String fileName = ""; // Name of the file
 int main(int argc, char *argv[]){
 	
+	if(argc > 1){
+		fileName = argv[1];
+	}
+
 	// Initializing the curses session
 	initscr();
 	raw();
 	keypad(stdscr, TRUE);
 	noecho();
 	curs_set(TRUE);
+	
 	// Main loop
+	bool running = true;
 	while(running){	
-	refresh();
-	getmaxyx(stdscr, MAX_Y, MAX_X);
-	mvprintw(0,0,"%i", MAX_X); 	
-	key = getch();
-	if(key == KEY_F(1))
-		running = 0;
+		// Update	
+		refresh();
+		getmaxyx(stdscr, MAX_Y, MAX_X);
+		
+		key = getch(); // Fetch keypress
+		switch(key){
+			// Exit
+			case KEY_F(1):
+			running = false;
+			break;
+			// Backspace
+			case 127:
+			break;
+			//Add the keypress to the line
+			default:
+			break;
+		}
+		clear();
 	}
-	// End curses session
-	getch(); //Debug
+	// Terminate the program
 	endwin();
 	return 0;
-}
-int mainLoop(){
 }

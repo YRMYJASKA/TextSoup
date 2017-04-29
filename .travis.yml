@@ -1,8 +1,8 @@
-language: c
+language: cpp
 script:
   - make
-#  - ./textsoup
-  - gcov src/main.c
+    #  - ./textSoup
+  - gcov src/main.cpp
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
