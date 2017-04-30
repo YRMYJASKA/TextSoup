@@ -53,21 +53,32 @@ int main(int argc, char *argv[]){
 		updateScr();	
 		key = getch(); // Fetch keypress
 		switch(key){
-			// Exit
-			case KEY_F(1):
-			running = false;
+			// Exit (^Q)
+			case 17:
+				running = false;
 			break;
 			// Backspace
 			case 127:
+			case KEY_BACKSPACE:
+				if(CURS_X >= 0){
+					LineBuffer[CURS_Y].erase(CURS_X, 1);
+					CURS_X--;
+				}else{
+					if(CURS_Y > 0){
+						LineBuffer.erase(LineBuffer.begin() + CURS_Y);
+						CURS_Y--;
+					}
+				}
 			break;
 			// Enter
 			case int('\n'):
 				LineBuffer.resize(LineBuffer.size()+1);
-				CURS_Y += 1;
+				CURS_Y++;
 			break;
 			//Add the keypress to the current line
 			default:
 				LineBuffer[CURS_Y] += char(key);
+				CURS_X += 1;
 			break;
 		}
 		clear();
@@ -82,3 +93,4 @@ void updateScr(){
 	for(int i = 0; i < LineBuffer.size(); i++)
 		mvprintw(i,1,LineBuffer[i].c_str());
 }
+

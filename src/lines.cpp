@@ -16,10 +16,16 @@
 // lines.cpp
 #include <string.h>
 #include <vector>
+#include <fstream>
+#include <ncurses.h>
 
 #include "lines.h"
 
 
 using namespace std;
+int getFileLength(ifstream file){
+	
+}
+vector<string> getFileLines(ifstream file){
 
-
+} 

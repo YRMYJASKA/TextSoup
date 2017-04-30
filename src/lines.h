@@ -18,10 +18,13 @@
 
 #include <string.h>
 #include <vector>
+#include <fstream>
 
 #define BUFF_SIZE 1024
 using namespace std;
 
 void updateScr();
 
+int getFileLength(ifstream file);
+vector<string> getFileLines(ifstream file); 
 #endif // LINES_H
