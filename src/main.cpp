@@ -12,7 +12,6 @@
 *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *    GNU General Public License for more details.
 */
-
 // main.cpp
 
 // Include the libraries
@@ -21,16 +20,21 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <vector>
+
+#include "lines.h"
 
 using namespace std;
 // Important variables
 int MAX_X, MAX_Y; // Window's current dimensions
 int CURS_X = 0, CURS_Y = 0; // Cursor's position
 int key; // The value of the key presses is stored into 'int key'
-FILE* ofile;
+FILE* ofile; // Output file
 string fileName = ""; // Name of the file
+vector<string> LineBuffer(1); //the buffer that stores the lines
+
 int main(int argc, char *argv[]){
-	
+	// If there was an file name inputted
 	if(argc > 1){
 		fileName = argv[1];
 	}
@@ -45,10 +49,8 @@ int main(int argc, char *argv[]){
 	// Main loop
 	bool running = true;
 	while(running){	
-		// Update	
-		refresh();
-		getmaxyx(stdscr, MAX_Y, MAX_X);
-		
+		// Update
+		updateScr();	
 		key = getch(); // Fetch keypress
 		switch(key){
 			// Exit
@@ -58,8 +60,14 @@ int main(int argc, char *argv[]){
 			// Backspace
 			case 127:
 			break;
-			//Add the keypress to the line
+			// Enter
+			case int('\n'):
+				LineBuffer.resize(LineBuffer.size()+1);
+				CURS_Y += 1;
+			break;
+			//Add the keypress to the current line
 			default:
+				LineBuffer[CURS_Y] += char(key);
 			break;
 		}
 		clear();
@@ -67,4 +75,10 @@ int main(int argc, char *argv[]){
 	// Terminate the program
 	endwin();
 	return 0;
+}
+void updateScr(){
+	refresh();
+	getmaxyx(stdscr, MAX_Y, MAX_X);
+	for(int i = 0; i < LineBuffer.size(); i++)
+		mvprintw(i,1,LineBuffer[i].c_str());
 }

@@ -1,5 +1,5 @@
 CC=g++
-SRC=src/main.cpp 
+SRC=src/main.cpp src/lines.cpp
 FLAGS=-lncurses
 OUTPUT=textSoup
 all:
