@@ -26,8 +26,8 @@
 
 using namespace std;
 // Important variables
-int MAX_X, MAX_Y; // Window's current dimensions
-int CURS_X = 0, CURS_Y = 0; // Cursor's position
+unsigned int MAX_X, MAX_Y; // Window's current dimensions
+unsigned int CURS_X = 0,  CURS_Y = 0; // Cursor's position
 int key; // The value of the key presses is stored into 'int key'
 FILE* ofile; // Output file
 string fileName = ""; // Name of the file
@@ -74,6 +74,30 @@ int main(int argc, char *argv[]){
 			case int('\n'):
 				LineBuffer.resize(LineBuffer.size()+1);
 				CURS_Y++;
+				CURS_X = 0;
+			break;
+			case KEY_LEFT:
+				if(CURS_X != 0){
+					CURS_X--;
+				}
+	
+			break;
+			case KEY_RIGHT:
+				if(CURS_X -1 < LineBuffer[CURS_Y].length()){
+					CURS_X++;
+				}
+
+			break;
+			case KEY_UP:
+				if(CURS_Y != 0){
+					CURS_Y--;
+				}
+
+			break;
+			case KEY_DOWN:
+				if(CURS_Y < LineBuffer.size()){
+					CURS_Y++;
+				}
 			break;
 			//Add the keypress to the current line
 			default:
@@ -88,9 +112,10 @@ int main(int argc, char *argv[]){
 	return 0;
 }
 void updateScr(){
+	wmove(stdscr, 1,1);
 	refresh();
 	getmaxyx(stdscr, MAX_Y, MAX_X);
-	for(int i = 0; i < LineBuffer.size(); i++)
+	for(unsigned int i = 0; i < LineBuffer.size(); i++)
 		mvprintw(i,1,LineBuffer[i].c_str());
 }
 

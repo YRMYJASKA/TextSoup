@@ -24,8 +24,9 @@
 
 using namespace std;
 int getFileLength(ifstream file){
-	
+	return 0;
 }
 vector<string> getFileLines(ifstream file){
-
+	vector<string> lines;
+	return lines;
 } 
