@@ -13,6 +13,8 @@
 *    GNU General Public License for more details.
 */
 // lines.h
+
+// TODO: change the name to something more clear. lines.h isn't used just for line handling anymore.
 #ifndef LINES_H
 #define LINES_H
 
@@ -21,10 +23,14 @@
 #include <fstream>
 
 #define BUFF_SIZE 1024
+#define TOP_PADDING 2
+
 using namespace std;
 
-void updateScr();
+// Declare fuctions for the program
+void updateScr(); // Updating the screen 
+void writeToFile(string NAME); // Write to file
+int getFileLength(ifstream file); // Get file's size (bytes, lines)
+vector<string> getFileLines(ifstream file); // Load a file 
 
-int getFileLength(ifstream file);
-vector<string> getFileLines(ifstream file); 
 #endif // LINES_H

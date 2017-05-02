@@ -25,18 +25,22 @@
 #include "lines.h"
 
 using namespace std;
+
 // Important variables
 unsigned int MAX_X, MAX_Y; // Window's current dimensions
 unsigned int CURS_X = 0,  CURS_Y = 0; // Cursor's position
 int key; // The value of the key presses is stored into 'int key'
-FILE* ofile; // Output file
 string fileName = ""; // Name of the file
 vector<string> LineBuffer(1); //the buffer that stores the lines
-
+bool running = true;
 int main(int argc, char *argv[]){
 	// If there was an file name inputted
 	if(argc > 1){
 		fileName = argv[1];
+	}else{
+		cout << "Please enter a file name or a correct flag!" << endl;
+		cout << "Enter 'soup --help' display usage and help" << endl;
+		return 1;	
 	}
 
 	// Initializing the curses session
@@ -44,10 +48,13 @@ int main(int argc, char *argv[]){
 	raw();
 	keypad(stdscr, TRUE);
 	noecho();
-	curs_set(TRUE);
-	
+	curs_set(FALSE);
+	start_color();
+	// Initialize colour pairs for different colours
+	init_pair(1, COLOR_BLACK, COLOR_WHITE); // Inverted colour pair (cursor)
+	// Add the cursor buffer to the first line
+	LineBuffer[0] = " ";	
 	// Main loop
-	bool running = true;
 	while(running){	
 		// Update
 		updateScr();	
@@ -57,16 +64,22 @@ int main(int argc, char *argv[]){
 			case 17:
 				running = false;
 			break;
+			// Save (^S)
+			case 19:
+				writeToFile(fileName);
+			break;
 			// Backspace
 			case 127:
 			case KEY_BACKSPACE:
-				if(CURS_X >= 0){
-					LineBuffer[CURS_Y].erase(CURS_X, 1);
-					CURS_X--;
+				if(CURS_X > 0){
+					LineBuffer[CURS_Y].erase(CURS_X-1, 1); // Delete the character under the cursor
+					if(CURS_X > 0)
+						CURS_X--; // Move the cursor to the left
 				}else{
 					if(CURS_Y > 0){
 						LineBuffer.erase(LineBuffer.begin() + CURS_Y);
-						CURS_Y--;
+						CURS_Y--; // Change to the line above
+						CURS_X = LineBuffer[CURS_Y].length() - 1; // Set the cursors X value to the end of the line above
 					}
 				}
 			break;
@@ -74,16 +87,18 @@ int main(int argc, char *argv[]){
 			case int('\n'):
 				LineBuffer.resize(LineBuffer.size()+1);
 				CURS_Y++;
+				LineBuffer[CURS_Y] = " ";
 				CURS_X = 0;
 			break;
+			// Arrow keys
 			case KEY_LEFT:
 				if(CURS_X != 0){
-					CURS_X--;
+					 CURS_X--;
 				}
 	
 			break;
 			case KEY_RIGHT:
-				if(CURS_X -1 < LineBuffer[CURS_Y].length()){
+				if(CURS_X < LineBuffer[CURS_Y].length() - 1){
 					CURS_X++;
 				}
 
@@ -95,13 +110,13 @@ int main(int argc, char *argv[]){
 
 			break;
 			case KEY_DOWN:
-				if(CURS_Y < LineBuffer.size()){
+				if(CURS_Y + 1 < LineBuffer.size()){
 					CURS_Y++;
 				}
 			break;
 			//Add the keypress to the current line
 			default:
-				LineBuffer[CURS_Y] += char(key);
+				LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin()+CURS_X, char(key));
 				CURS_X += 1;
 			break;
 		}
@@ -115,7 +130,33 @@ void updateScr(){
 	wmove(stdscr, 1,1);
 	refresh();
 	getmaxyx(stdscr, MAX_Y, MAX_X);
-	for(unsigned int i = 0; i < LineBuffer.size(); i++)
-		mvprintw(i,1,LineBuffer[i].c_str());
+	attron(COLOR_PAIR(1));
+	mvprintw(0,0, fileName.c_str());
+	mvprintw(0, fileName.length(),"X:%i,Y:%i Lines: %i", CURS_X, CURS_Y, LineBuffer.size());
+	attroff(COLOR_PAIR(1));
+	for(unsigned int i = 0; i < LineBuffer.size(); i++){
+		// Draw the line
+		if(i == CURS_Y){ // If this line has te cursor on it
+			for(int x = 0; x < LineBuffer[i].length(); x++){
+				if(x == CURS_X){
+					attron(COLOR_PAIR(1));
+					mvprintw(i + TOP_PADDING, x  , "%c", LineBuffer[i].at(x));	// Draw the cursor to the correct position. 
+					attroff(COLOR_PAIR(1));
+				}
+				else{
+					mvprintw(i + TOP_PADDING, x, "%c", LineBuffer[i].at(x));	// Draw the cursor to the correct position.
+				}
+			}
+		}
+		else{ // If not the cursor line draw without special handling
+			mvprintw(i + TOP_PADDING,1,LineBuffer[i].c_str());
+		}
+	}
 }
-
+void writeToFile(string NAME){
+	ofstream oFILE;
+	oFILE.open(NAME); // Open the file for writing
+	for(int y = 0; y < LineBuffer.size(); y++)	
+		oFILE << LineBuffer[y].substr(0,LineBuffer[y].length() - 1) << endl; // Write a line to file without the spacer " " for the cursor
+	oFILE.close(); // close the file after we are done
+}
