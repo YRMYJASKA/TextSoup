@@ -23,8 +23,9 @@
 #include <fstream>
 
 #define BUFF_SIZE 1024
-#define TOP_PADDING 2
 
+#define TOP_PADDING 2
+#define LEFT_PADDING 4
 using namespace std;
 
 // Declare fuctions for the program
