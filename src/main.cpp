@@ -137,7 +137,7 @@ void updateScr(){
 	for(unsigned int i = 0; i < LineBuffer.size(); i++){
 		// Draw the line
 		if(i == CURS_Y){ // If this line has te cursor on it
-			for(int x = 0; x < LineBuffer[i].length(); x++){
+			for(unsigned int x = 0; x < LineBuffer[i].length(); x++){
 				if(x == CURS_X){
 					attron(COLOR_PAIR(1));
 					mvprintw(i + TOP_PADDING, x  , "%c", LineBuffer[i].at(x));	// Draw the cursor to the correct position. 
@@ -156,7 +156,7 @@ void updateScr(){
 void writeToFile(string NAME){
 	ofstream oFILE;
 	oFILE.open(NAME); // Open the file for writing
-	for(int y = 0; y < LineBuffer.size(); y++)	
+	for(unsigned int y = 0; y < LineBuffer.size(); y++)	
 		oFILE << LineBuffer[y].substr(0,LineBuffer[y].length() - 1) << endl; // Write a line to file without the spacer " " for the cursor
 	oFILE.close(); // close the file after we are done
 }
