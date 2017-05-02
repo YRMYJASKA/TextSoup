@@ -4,19 +4,19 @@ Yet another text editor
 
 # Installation:
 ## Requirements
-	* Markup: 'g++ 6.3'
-	* Markup: 'C++11'
-	* Markup: 'ncurses' C/C++ library
+Markup: 'g++ 6.3'
+Markup: 'C++11'
+Markup: 'ncurses' C/C++ library
 
 # TODO:
-## URGENT:
+### URGENT:
 	* Fix X and Y coordinate over/underflowing
 	* Load from file
-## POLISH:
+### POLISH:
 	* Add multi-threading for the update routine to stop the flickering
 	* Fix .travis.yml to build the project correctly in g++4.9+ **(or switch services)**
 
-## FEATURES:
+### FEATURES:
 	* Syntax highlighting
 		* C++
 		* C
