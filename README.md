@@ -4,9 +4,9 @@ Yet another text editor
 
 # Installation:
 ## Requirements
-Markup: 'g++ 6.3'
-Markup: 'C++11'
-Markup: 'ncurses' C/C++ library
+'g++ 6.3'
+'C++11'
+'ncurses, a C/C++ library'
 
 # TODO:
 ### URGENT:
