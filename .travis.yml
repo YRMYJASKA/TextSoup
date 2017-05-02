@@ -1,8 +1,10 @@
 language: cpp
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y;
+  - sudo apt-get update -qq
+  - sudo apt-get install g++-4.9 -y
+  - g++ --version
 script:
   - make
-    #  - ./textSoup
-  - gcov src/main.cpp
-
 after_success:
 - bash <(curl -s https://codecov.io/bash)
