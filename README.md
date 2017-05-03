@@ -1,6 +1,7 @@
 # TextSoup [![Build Status](https://travis-ci.org/YRMYJASKA/TextSoup.svg?branch=master)](https://travis-ci.org/YRMYJASKA/TextSoup)
-	Yet another text editor
-----
+
+Yet another text editor
+
 
 # Installation:
 ## Requirements
@@ -26,4 +27,5 @@
 * Search function
 * Save to a different file
 * Config file (.souprc)
-
+# Copyright
+Copyright (C) 2017 Jyry Hjelt
