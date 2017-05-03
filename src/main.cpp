@@ -76,10 +76,12 @@ int main(int argc, char *argv[]){
 					if(CURS_X > 0)
 						CURS_X--; // Move the cursor to the left
 				}else{
-					if(CURS_Y > 0){
+					if(CURS_Y > 0){ // Checking we are not deleting the first line
+						LineBuffer[CURS_Y - 1].pop_back(); // Delete the cursor buffer
+						CURS_X = LineBuffer[CURS_Y-1].length(); // Set the cursors X value at the corect position
+						LineBuffer[CURS_Y - 1] += LineBuffer[CURS_Y]; // Append the string above with the remains of the last line
 						LineBuffer.erase(LineBuffer.begin() + CURS_Y);
 						CURS_Y--; // Change to the line above
-						CURS_X = LineBuffer[CURS_Y].length() - 1; // Set the cursors X value to the end of the line above
 					}
 				}
 			break;
@@ -93,7 +95,9 @@ int main(int argc, char *argv[]){
 					LineBuffer.insert(LineBuffer.begin() + CURS_Y + 1, LineBuffer[CURS_Y].substr(CURS_X, LineBuffer[CURS_Y].length()));				
 				}
 				LineBuffer[CURS_Y].erase(CURS_X, LineBuffer[CURS_Y].length()-1); // Erase the right side from the previous line
-				//LineBuffer[CURS_Y] += ' '; // Add the cursor buffer to the end of the line
+				// If the last line didnt have a cursor buffer
+				if(LineBuffer[CURS_Y].back() != ' ')
+					LineBuffer[CURS_Y] += ' '; // Add the cursor buffer to the end of the line
 				// Set correct  Y and X values
 				CURS_Y++;
 				CURS_X = 0;

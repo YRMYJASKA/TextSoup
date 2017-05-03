@@ -12,7 +12,6 @@ Yet another text editor
 ## Installing
 # TODO:
 ### URGENT:
-* Fix X and Y coordinate over/underflowing
 * Load from file
 ### POLISH:
 * Add multi-threading for the update routine to stop the flickering
