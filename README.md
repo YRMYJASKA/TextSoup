@@ -1,5 +1,5 @@
 # TextSoup [![Build Status](https://travis-ci.org/YRMYJASKA/TextSoup.svg?branch=master)](https://travis-ci.org/YRMYJASKA/TextSoup)
-Yet another text editor
+	Yet another text editor
 ----
 
 # Installation:
@@ -7,7 +7,7 @@ Yet another text editor
 * ``` git ```
 * ``` make ```
 * ``` g++ 6.3 ```
-* ``` C++11 ```
+* ``` C++14 ```
 * ``` nCurses ``` , a C/C++ library
 ## Installing
 # TODO:
@@ -17,7 +17,6 @@ Yet another text editor
 * Add multi-threading for the update routine to stop the flickering
 * Fix .travis.yml to build the project correctly in g++4.9+ **(or switch services)**
 * Tab support and automatic indenting
-* 
 ### FEATURES:
 * Syntax highlighting
 	* C++
