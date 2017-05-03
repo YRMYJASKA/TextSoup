@@ -85,11 +85,17 @@ int main(int argc, char *argv[]){
 			break;
 			// Enter
 			case int('\n'):
-				LineBuffer.resize(LineBuffer.size()+1);
-				LineBuffer[CURS_Y + 1] = LineBuffer[CURS_Y].substr(CURS_X, LineBuffer[CURS_Y].length()-1);
-				LineBuffer[CURS_Y].erase(CURS_X, LineBuffer[CURS_Y].length()-1);
+				//LineBuffer.resize(LineBuffer.size()+1); // Adding a room for the new line in the buffer
+				// Add the text on te rights side of the cursor to the new line below
+				if(true){
+					LineBuffer.insert(LineBuffer.begin() + CURS_Y + 1, LineBuffer[CURS_Y].substr(CURS_X, LineBuffer[CURS_Y].length()));				
+				}else{
+					LineBuffer.insert(LineBuffer.begin() + CURS_Y + 1, LineBuffer[CURS_Y].substr(CURS_X, LineBuffer[CURS_Y].length()));				
+				}
+				LineBuffer[CURS_Y].erase(CURS_X, LineBuffer[CURS_Y].length()-1); // Erase the right side from the previous line
+				//LineBuffer[CURS_Y] += ' '; // Add the cursor buffer to the end of the line
+				// Set correct  Y and X values
 				CURS_Y++;
-				LineBuffer[CURS_Y] += ' ';
 				CURS_X = 0;
 			break;
 			// Arrow keys
@@ -100,7 +106,7 @@ int main(int argc, char *argv[]){
 	
 			break;
 			case KEY_RIGHT:
-				if(CURS_X < LineBuffer[CURS_Y].length()){
+				if(CURS_X < LineBuffer[CURS_Y].length() - 1){
 					CURS_X++;
 				}
 

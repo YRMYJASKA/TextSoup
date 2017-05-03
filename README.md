@@ -17,7 +17,8 @@ Yet another text editor
 ### POLISH:
 * Add multi-threading for the update routine to stop the flickering
 * Fix .travis.yml to build the project correctly in g++4.9+ **(or switch services)**
-
+* Tab support and automatic indenting
+* 
 ### FEATURES:
 * Syntax highlighting
 	* C++
@@ -25,5 +26,6 @@ Yet another text editor
 	* Python
 	* (More languages)
 * Search function
-* Save to a differet file
- 
+* Save to a different file
+* Config file (.souprc)
+
