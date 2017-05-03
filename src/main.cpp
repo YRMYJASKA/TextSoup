@@ -42,7 +42,9 @@ int main(int argc, char *argv[]){
 		cout << "Enter 'soup --help' display usage and help" << endl;
 		return 1;	
 	}
-
+	if(ifstream(fileName)){
+		getFileLines(fileName);
+	}
 	// Initializing the curses session
 	initscr();
 	raw();
@@ -66,7 +68,7 @@ int main(int argc, char *argv[]){
 			break;
 			// Save (^S)
 			case 19:
-				writeToFile(fileName);
+				writeToFile(fileName, LineBuffer);
 			break;
 			// Backspace
 			case 127:
@@ -168,10 +170,13 @@ void updateScr(){
 		}
 	}
 }
-void writeToFile(string NAME){
-	ofstream oFILE;
-	oFILE.open(NAME); // Open the file for writing
-	for(unsigned int y = 0; y < LineBuffer.size(); y++)	
-		oFILE << LineBuffer[y].substr(0,LineBuffer[y].length() ) << endl; // Write a line to file without the spacer " " for the cursor
-	oFILE.close(); // close the file after we are done
+void getFileLines(string& NAME){
+	string line;
+	ifstream iFILE;
+	iFILE.open(NAME.c_str()); // Open the file stream
+	// Write the file line-by-line to the LineBuffer
+	while(getline(iFILE, line)){
+		LineBuffer.push_back(line+" ");
+	}
+	iFILE.close(); // Close file stream
 }

@@ -23,10 +23,18 @@
 
 
 using namespace std;
+void writeToFile(string& NAME, vector<string> lines){
+	ofstream oFILE;
+	oFILE.open(NAME.c_str()); // Open the file for writing
+	for(unsigned int y = 0; y < lines.size(); y++)	
+		oFILE << lines[y].substr(0,lines[y].length() ) << endl; // Write a line to file without the spacer " " for the cursor
+	oFILE.close(); // close the file after we are done
+}
 int getFileLength(ifstream file){
 	return 0;
 }
-vector<string> getFileLines(ifstream file){
-	vector<string> lines;
-	return lines;
-} 
+bool fileExists(string& NAME){
+	// Pretty self-explanatory...
+	ifstream file(NAME.c_str());
+	return file.good();
+}

@@ -30,8 +30,11 @@ using namespace std;
 
 // Declare fuctions for the program
 void updateScr(); // Updating the screen 
-void writeToFile(string NAME); // Write to file
+void writeToFile(string& NAME, vector<string> lines); // Write to file
+
+bool fileExists(string& NAME); // Checks if there exists a file with a name
 int getFileLength(ifstream file); // Get file's size (bytes, lines)
-vector<string> getFileLines(ifstream file); // Load a file 
+void getFileLines(string& NAME); // Load a file 
+
 
 #endif // LINES_H
