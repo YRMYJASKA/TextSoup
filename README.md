@@ -15,7 +15,6 @@ Yet another text editor
 ### URGENT:
 * Load from file
 	* **BUG** Load function adds an extra empty line at the start of the LineBuffer 
-* All the lines should be vieable with the program, and not limited by the screen's height
 ### POLISH:
 * Add multi-threading for the update routine to stop the flickering
 * Fix .travis.yml to build the project correctly in g++4.9+ **(or switch services)**

@@ -33,6 +33,7 @@ int key; // The value of the key presses is stored into 'int key'
 string fileName = ""; // Name of the file
 vector<string> LineBuffer(1); //the buffer that stores the lines
 bool running = true;
+unsigned lineArea = 0; // Variable used to draw more lines that the screens height allows
 int main(int argc, char *argv[]){
 	// If there was an file name inputted
 	if(argc > 1){
@@ -84,8 +85,11 @@ int main(int argc, char *argv[]){
 						LineBuffer[CURS_Y - 1] += LineBuffer[CURS_Y]; // Append the string above with the remains of the last line
 						LineBuffer.erase(LineBuffer.begin() + CURS_Y);
 						CURS_Y--; // Change to the line above
+						if(CURS_Y < lineArea && lineArea > 0)
+							lineArea--;
 					}
 				}
+
 			break;
 			// Enter
 			case int('\n'):
@@ -102,6 +106,9 @@ int main(int argc, char *argv[]){
 					LineBuffer[CURS_Y] += ' '; // Add the cursor buffer to the end of the line
 				// Set correct  Y and X values
 				CURS_Y++;
+				if(CURS_Y >= MAX_Y-TOP_PADDING)
+						lineArea++;
+
 				CURS_X = 0;
 			break;
 			// Arrow keys
@@ -121,7 +128,9 @@ int main(int argc, char *argv[]){
 				if(CURS_Y != 0){
 					CURS_Y--;
 					if(CURS_X + 1>= LineBuffer[CURS_Y].length())
-						CURS_X = LineBuffer[CURS_Y].length()-1; 
+						CURS_X = LineBuffer[CURS_Y].length()-1;
+				        if(CURS_Y < lineArea && lineArea > 0)
+						lineArea--;	
 				}
 			break;
 			case KEY_DOWN:
@@ -129,6 +138,8 @@ int main(int argc, char *argv[]){
 					CURS_Y++;
 					if(CURS_X + 1 >= LineBuffer[CURS_Y].length())
 						CURS_X = LineBuffer[CURS_Y].length()-1; 
+					if(CURS_Y >= MAX_Y-TOP_PADDING)
+						lineArea++;
 				}
 			break;
 			//Add the keypress to the current line
@@ -144,30 +155,37 @@ int main(int argc, char *argv[]){
 	return 0;
 }
 void updateScr(){
+	// Refresh
 	refresh();
 	getmaxyx(stdscr, MAX_Y, MAX_X);
 	attron(COLOR_PAIR(1));
+	// Print status bar
 	mvprintw(0,0, fileName.c_str());
-	mvprintw(0, fileName.length()," %i,%i L: %i", CURS_X, CURS_Y, LineBuffer.size());
+	mvprintw(0, fileName.length()," %i,%i L: %i LineArea: %i", CURS_X, CURS_Y, LineBuffer.size(), lineArea);
 	attroff(COLOR_PAIR(1));
+	int z = 0;
 	for(unsigned int i = 0; i < LineBuffer.size(); i++){
 		// Draw the line
-		mvprintw(i + TOP_PADDING, 0, "%d", i+1);
+		if(i < lineArea)
+			continue;
+
+		mvprintw(z + TOP_PADDING, 0, "%d", i+1);
 		if(i == CURS_Y){ // If this line has te cursor on it
 			for(unsigned int x = 0; x < LineBuffer[i].length(); x++){
 				if(x == CURS_X){
 					attron(COLOR_PAIR(1));
-					mvprintw(i + TOP_PADDING, x+LEFT_PADDING , "%c", LineBuffer[i].at(x));	// Draw the cursor to the correct position. 
+					mvprintw(z + TOP_PADDING, x+LEFT_PADDING , "%c", LineBuffer[i].at(x));	// Draw the cursor to the correct position. 
 					attroff(COLOR_PAIR(1));
 				}
 				else{
-					mvprintw(i + TOP_PADDING, x + LEFT_PADDING, "%c", LineBuffer[i].at(x));	// Draw the regular character
+					mvprintw(z + TOP_PADDING, x + LEFT_PADDING, "%c", LineBuffer[i].at(x));	// Draw the regular character
 				}
 			}
 		}
 		else{ // If not the cursor line draw without special handling
-			mvprintw(i + TOP_PADDING, LEFT_PADDING,LineBuffer[i].c_str()); 
+			mvprintw(z + TOP_PADDING, LEFT_PADDING,LineBuffer[i].c_str()); 
 		}
+		z++;
 	}
 }
 void getFileLines(string& NAME){
