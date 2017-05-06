@@ -19,7 +19,7 @@ Clone the git repository to a directory
 
 Change to the TextSoup directory
 
-3. make
+3. ``make``
 
 Build the program using make
 Remember to add the directory to your PATH variabel to use outside of the original directory.
