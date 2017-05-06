@@ -28,13 +28,11 @@ Remember to add the directory to your PATH variabel to use outside of the origin
 
 # TODO:
 ### URGENT:
-* Load from file
-	* **BUG** Load function adds an extra empty line at the start of the LineBuffer 
 * Installation script that installs the program easily
+* Tab support and automatic indenting
 ### POLISH:
 * Add multi-threading for the update routine to stop the flickering
 * Fix .travis.yml to build the project correctly in g++4.9+ **(or switch services)**
-* Tab support and automatic indenting
 ### FEATURES:
 * Syntax highlighting
 	* C++
