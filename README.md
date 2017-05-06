@@ -11,10 +11,26 @@ Yet another text editor
 * ``` C++14 ```
 * ``` nCurses ``` , a C/C++ library
 ## Installing
+1. ``git clone https://github.com/yrmyjaska/TextSoup``
+
+Clone the git repository to a directory
+
+2. ``cd TextSoup``
+
+Change to the TextSoup directory
+
+3. make
+
+Build the program using make
+Remember to add the directory to your PATH variabel to use outside of the original directory.
+(An installation script incoming soon)
+# Usage
+
 # TODO:
 ### URGENT:
 * Load from file
 	* **BUG** Load function adds an extra empty line at the start of the LineBuffer 
+* Installation script that installs the program easily
 ### POLISH:
 * Add multi-threading for the update routine to stop the flickering
 * Fix .travis.yml to build the project correctly in g++4.9+ **(or switch services)**
