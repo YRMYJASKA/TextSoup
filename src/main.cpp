@@ -137,7 +137,7 @@ int main(int argc, char *argv[]){
 					if(CURS_X + 1 >= LineBuffer[CURS_Y].length())
 						CURS_X = LineBuffer[CURS_Y].length()-1; 
 					
-					if(CURS_Y >= MAX_Y-TOP_PADDING)
+					if(CURS_Y >= MAX_Y-TOP_PADDING+lineArea)
 						lineArea++;
 				}
 			break;
