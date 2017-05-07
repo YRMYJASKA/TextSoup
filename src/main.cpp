@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
 				// Set correct  Y and X values
 				CURS_Y++;
 
-				if(CURS_Y >= MAX_Y-TOP_PADDING)
+				if(CURS_Y >= MAX_Y-TOP_PADDING+lineArea)
 						lineArea++;
 
 				CURS_X = 0;
