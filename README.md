@@ -22,7 +22,9 @@ Change to the TextSoup directory
 3. ``make``
 
 Build the program using make
+
 Remember to add the directory to your PATH variabel to use outside of the original directory.
+
 (An installation script incoming soon)
 # Usage
 
@@ -30,6 +32,8 @@ Remember to add the directory to your PATH variabel to use outside of the origin
 ### URGENT:
 * Installation script that installs the program easily
 * Tab support and automatic indenting
+	* Now you can press tab to append 4 sapces into a string, but still doesn't work well with actual tabs
+	* Find out how to count how many spaces in front of a string to make automatic indenting
 ### POLISH:
 * Add multi-threading for the update routine to stop the flickering
 * Fix .travis.yml to build the project correctly in g++4.9+ **(or switch services)**

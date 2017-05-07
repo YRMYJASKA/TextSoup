@@ -141,7 +141,14 @@ int main(int argc, char *argv[]){
 						lineArea++;
 				}
 			break;
-			//Add the keypress to the current line
+			// TAB key
+			case 9:
+			for(int i = 0; i < 4; i++){
+				LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin()+CURS_X, char(' '));
+				CURS_X += 1;
+			}
+			break;
+			// Add the keypress to the current line
 			default:
 				LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin()+CURS_X, char(key));
 				CURS_X += 1;
