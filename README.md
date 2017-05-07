@@ -8,7 +8,7 @@ Yet another text editor
 * ``` git ```
 * ``` make ```
 * ``` g++ 6.3 ```
-* ``` C++14 ```
+* ``` C++11 ```
 * ``` nCurses ``` , a C/C++ library
 ## Installing
 1. ``git clone https://github.com/yrmyjaska/TextSoup``
