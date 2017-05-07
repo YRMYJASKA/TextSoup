@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if [ -f ~/.bashrc ]; then 
 	echo "export PATH=$PATH:$PWD" >> ~/.bashrc
 fi
