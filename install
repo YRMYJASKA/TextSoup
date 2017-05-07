@@ -1,0 +1,7 @@
+#!/bin/bash
+if [ -f ~/.bashrc ]; then 
+	echo "export PATH=$PATH:$PWD" >> ~/.bashrc
+fi
+if [ -f ~/.zshrc ]; then
+	echo "export PATH=$PATH:$PWD" >> ~/.zshrc
+fi

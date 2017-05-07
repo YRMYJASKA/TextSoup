@@ -19,18 +19,14 @@ Clone the git repository to a directory
 
 Change to the TextSoup directory
 
-3. ``make``
+3. ``./install && make``
 
-Build the program using make
+Add the textSoup directory to the PATH environment variable and build the program using make
 
-Remember to add the directory to your PATH variabel to use outside of the original directory.
-
-(An installation script incoming soon)
 # Usage
 
 # TODO:
 ### URGENT:
-* Installation script that installs the program easily
 * Tab support and automatic indenting
 	* Now you can press tab to append 4 sapces into a string, but still doesn't work well with actual tabs
 	* Find out how to count how many spaces in front of a string to make automatic indenting
