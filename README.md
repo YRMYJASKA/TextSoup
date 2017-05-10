@@ -19,9 +19,11 @@ Clone the git repository to a directory
 
 Change to the TextSoup directory
 
-3. ``./install && make``
+3. ``sudo ./configure && make``
 
-Add the textSoup directory to the PATH environment variable and build the program using make
+Add the textSoup directory to the PATH environment variable and generate config files.
+
+Then build the program using make
 
 # Usage
 

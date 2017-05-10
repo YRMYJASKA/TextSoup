@@ -18,6 +18,7 @@
 #include <vector>
 #include <fstream>
 #include <ncurses.h>
+#include <iostream>
 
 #include "files.h"
 
@@ -40,4 +41,13 @@ bool fileExists(string& NAME){
 	// Pretty self-explanatory...
 	ifstream file(NAME.c_str());
 	return file.good();
+}
+void printFile(string NAME){
+	string line;
+	ifstream iFILE(NAME);
+	while (iFILE){
+			getline(iFILE, line);
+			cout << line << endl;
+	}
+	iFILE.close();
 }

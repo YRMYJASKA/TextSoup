@@ -30,5 +30,5 @@ using namespace std;
 
 // General routines for the program
 void updateScr(); // Updating the screen 
-
+void getLocation(); // Get the location of source code
 #endif // LINES_H

@@ -35,17 +35,29 @@ string fileName     = ""; // Name of the file
 vector<string> LineBuffer(1); //the buffer that stores the lines
 bool running        = true; // Boolean to determine if the program is running
 unsigned lineArea   = 0; // Variable used to draw more lines that the screens height allows
-
-int main(int argc, char *argv[]){
+string location;
+int main(int count, char* option[]){
+	// Get the location of the source code
+	getLocation();
+	cout << location << endl;
 	// Add the cursor buffer to the first line
 	LineBuffer[0] = " ";	
 	// If there was an file name inputted
-	if(argc > 1){
-		fileName = argv[1];
+	if(count > 1){
+		if(!strcmp(option[1], "--version")){
+			cout << "Current version of TextSoup is v1.0.0"<< endl;
+			return 0;	
+		}else if(!strcmp(option[1], "--help")){
+			printFile(location + "/info/help.txt");
+			return 0;
+		}else if(!strcmp(option[1], "--license")){
+			printFile(location + "/LICENSE");
+			return 0;
+		}else{
+			fileName = option[1];
+		}
 	}else{
-		cout << "Please enter a file name or a correct flag!" << endl;
-		cout << "Enter 'soup --help' display usage and help" << endl;
-		return 1;	
+		fileName = "Untitled";
 	}
 	if(ifstream(fileName)){
 		getFileLines(fileName);
@@ -214,4 +226,14 @@ void getFileLines(string& NAME){
 		}
 	}
 	iFILE.close(); // Close file stream
+}
+void getLocation(){
+	ifstream iFILE("/etc/textSoup/location");
+	if(iFILE.good()){
+		getline(iFILE, location);
+	}else{
+	// TODO: some error message
+	cout << "fuck all happened" << endl;
+	}
+	iFILE.close();
 }

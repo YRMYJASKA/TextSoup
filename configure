@@ -1,0 +1,18 @@
+#!/bin/sh
+# Add the program to the PATH
+if [ -f ~/.bashrc ]; then 
+	echo "Adding to .bashr..."
+	echo "export PATH=$PATH:$PWD/bin" >> ~/.bashrc
+fi
+# If using zsh shell
+if [ -f ~/.zshrc ]; then
+	echo "Adding to .zshrc..."
+	echo "export PATH=$PATH:$PWD/bin" >> ~/.zshrc
+fi
+# Creating /etc/ config files
+echo "Creating config file directroy in /etc/ ..."
+mkdir /etc/textSoup
+echo "Creating config files in /etc/textSoup/ ..."
+echo "$PWD" > /etc/textSoup/location
+
+echo "Finished configuring!"
