@@ -27,13 +27,14 @@
 using namespace std;
 
 // Important variables
-unsigned int MAX_X, MAX_Y; // Window's current dimensions
+unsigned int MAX_X  = 0, MAX_Y   = 0; // Window's current dimensions
 unsigned int CURS_X = 0,  CURS_Y = 0; // Cursor's position
-int key; // The value of the key presses is stored into 'int key'
-string fileName = ""; // Name of the file
+int key             = 0; // The value of the key presses is stored into 'int key'
+string fileName     = ""; // Name of the file
 vector<string> LineBuffer(1); //the buffer that stores the lines
-bool running = true; // Boolean to determine if the program is running
-unsigned lineArea = 0; // Variable used to draw more lines that the screens height allows
+bool running        = true; // Boolean to determine if the program is running
+unsigned lineArea   = 0; // Variable used to draw more lines that the screens height allows
+
 int main(int argc, char *argv[]){
 	// Add the cursor buffer to the first line
 	LineBuffer[0] = " ";	
