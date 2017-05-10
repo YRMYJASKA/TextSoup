@@ -22,7 +22,8 @@
 #include <stdlib.h>
 #include <vector>
 
-#include "lines.h"
+#include "main.h"
+#include "files.h"
 
 using namespace std;
 

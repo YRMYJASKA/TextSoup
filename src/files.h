@@ -12,29 +12,20 @@
 *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *    GNU General Public License for more details.
 */
-// lines.h
+// Files.h
 
-// TODO: change the name to something more clear. lines.h isn't used just for line handling anymore.
-#ifndef LINES_H
-#define LINES_H
+#ifndef FILES_H
+#define FILES_H
 
 #include <string.h>
-#include <vector>
 #include <fstream>
 
-#define BUFF_SIZE 1024
-
-#define TOP_PADDING 2
-#define LEFT_PADDING 4
 using namespace std;
 
-// Declare fuctions for the program
-void updateScr(); // Updating the screen 
-void writeToFile(string& NAME, vector<string> lines); // Write to file
-
+// File Functions
 bool fileExists(string& NAME); // Checks if there exists a file with a name
 int getFileLength(ifstream file); // Get file's size (bytes, lines)
 void getFileLines(string& NAME); // Load a file 
+void writeToFile(string& NAME, vector<string> lines); // Write to file
 
-
-#endif // LINES_H
+#endif // FILES_H

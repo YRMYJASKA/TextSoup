@@ -12,29 +12,23 @@
 *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *    GNU General Public License for more details.
 */
+// lines.h
 
-// lines.cpp
+#ifndef LINES_H
+#define LINES_H
+
 #include <string.h>
 #include <vector>
 #include <fstream>
-#include <ncurses.h>
 
-#include "lines.h"
-
+// Some constant values
+#define BUFF_SIZE 1024
+#define TOP_PADDING 2
+#define LEFT_PADDING 4
 
 using namespace std;
-void writeToFile(string& NAME, vector<string> lines){
-	ofstream oFILE;
-	oFILE.open(NAME.c_str()); // Open the file for writing
-	for(unsigned int y = 0; y < lines.size(); y++)	
-		oFILE << lines[y].substr(0,lines[y].length() ) << endl; // Write a line to file without the spacer " " for the cursor
-	oFILE.close(); // close the file after we are done
-}
-int getFileLength(ifstream file){
-	return 0;
-}
-bool fileExists(string& NAME){
-	// Pretty self-explanatory...
-	ifstream file(NAME.c_str());
-	return file.good();
-}
+
+// General routines for the program
+void updateScr(); // Updating the screen 
+
+#endif // LINES_H
