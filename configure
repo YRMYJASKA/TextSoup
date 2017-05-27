@@ -1,4 +1,6 @@
 #!/bin/sh
+# Make the binary directory for textsoup
+mkdir bin
 # Add the program to the PATH
 if [ -f ~/.bashrc ]; then 
 	echo "Adding to .bashr..."
