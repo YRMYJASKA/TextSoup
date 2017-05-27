@@ -22,26 +22,24 @@
 
 #include "files.h"
 
-
 using namespace std;
+
 // Write the current LineBuffer to a file
 void writeToFile(string& NAME, vector<string> lines){
 	ofstream oFILE;
-	oFILE.open(NAME.c_str()); // Open the file for writing
-	for(unsigned int y = 0; y < lines.size(); y++)	
-		oFILE << lines[y].substr(0,lines[y].length() ) << endl; // Write a line to file without the spacer " " for the cursor
-	oFILE.close(); // close the file after we are done
+	oFILE.open(NAME.c_str()); 						// Open the file for writing
+	for(unsigned int y = 0; y < lines.size(); y++)	// Write the given buffer line-by-line to the destination file
+		oFILE << lines[y].substr(0,lines[y].length() ) << endl;
+	oFILE.close(); 									// close the file after we are done
 }
-// TODO: Implement/delete
-int getFileLength(ifstream file){
-	return 0;
-}
+
 // Check if a file exists
 bool fileExists(string& NAME){
 	// Pretty self-explanatory...
 	ifstream file(NAME.c_str());
 	return file.good();
 }
+// Used to get the contents of files like help.txt
 void printFile(string NAME){
 	string line;
 	ifstream iFILE(NAME);

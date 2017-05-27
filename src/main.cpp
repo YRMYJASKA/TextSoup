@@ -28,20 +28,24 @@
 using namespace std; 
  
 // Important variables 
-unsigned int MAX_X  = 0, MAX_Y   = 0; // Window's current dimensions 
-unsigned int CURS_X = 0,  CURS_Y = 0; // Cursor's position 
-int key             = 0; // The value of the key presses is stored into 'int key' 
-string fileName     = ""; // Name of the file 
-vector<string> LineBuffer(1); //the buffer that stores the lines 
-bool running        = true; // Boolean to determine if the program is running 
-unsigned lineArea   = 0; // Variable used to draw more lines that the screens height allows 
-string location; 
+unsigned int MAX_X  = 0, MAX_Y   = 0; 	// Window's current dimensions 
+unsigned int CURS_X = 0,  CURS_Y = 0; 	// Cursor's position 
+int key             = 0; 				// The value of the key presses is stored into 'int key' 
+string fileName     = ""; 				// Name of the file 
+vector<string> LineBuffer(1); 			//the buffer that stores the lines 
+bool running        = true; 			// Boolean to determine if the program is running 
+unsigned lineArea   = 0; 				// Variable used to draw more lines that the screens height allows 
+string location; 						// TextSoup's direcotry location
+
 int main(int count, char* option[]){ 
+	
 	// Get the location of the source code 
 	getLocation(); 
 	cout << location << endl; 
+	
 	// Add the cursor buffer to the first line 
 	LineBuffer[0] = " ";	 
+	
 	// If there was an file name inputted 
 	if(count > 1){ 
 		if(!strcmp(option[1], "--version")){ 
@@ -62,6 +66,7 @@ int main(int count, char* option[]){
 	if(ifstream(fileName)){ 
 		getFileLines(fileName); 
 	} 
+	
 	// Initializing the curses session 
 	initscr(); 
 	raw(); 
@@ -69,22 +74,30 @@ int main(int count, char* option[]){
 	noecho(); 
 	curs_set(FALSE); 
 	start_color(); 
+
 	// Initialize colour pairs for different colours 
 	init_pair(1, COLOR_BLACK, COLOR_WHITE); // Inverted colour pair (cursor) 
+	
 	// Main loop 
 	while(running){	 
+		
 		// Update 
 		updateScr();	 
+		
 		key = getch(); // Fetch keypress 
+		// Process the keypress...
 		switch(key){ 
+			
 			// Exit (^Q) 
 			case 17: 
 				running = false; 
 			break; 
+			
 			// Save (^S) 
 			case 19: 
 				writeToFile(fileName, LineBuffer); 
 			break; 
+			
 			// Backspace 
 			case 127: 
 			case KEY_BACKSPACE: 
@@ -105,6 +118,7 @@ int main(int count, char* option[]){
 				} 
  
 			break; 
+			
 			// Enter 
 			case int('\n'): 
 				// Add the text on te rights side of the cursor to the new line below 
@@ -122,6 +136,7 @@ int main(int count, char* option[]){
  
 				CURS_X = 0; 
 			break; 
+			
 			// Arrow keys 
 			case KEY_LEFT: 
 				if(CURS_X != 0){ 
@@ -155,6 +170,7 @@ int main(int count, char* option[]){
 						lineArea++; 
 				} 
 			break; 
+			
 			// TAB key 
 			case 9: 
 			for(int i = 0; i < 4; i++){ 
@@ -162,27 +178,33 @@ int main(int count, char* option[]){
 				CURS_X += 1; 
 			} 
 			break; 
-			// Add the keypress to the current line 
+			
+			// Add the keypress to the current line if a regular keypress
 			default: 
 				LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin()+CURS_X, char(key)); 
 				CURS_X += 1; 
 			break; 
 		} 
+		// Clear the screen to draw the screen correctly
 		clear(); 
 	} 
+
 	// Terminate the program 
 	endwin(); 
 	return 0; 
 } 
 void updateScr(){ 
+	
 	// Refresh 
 	refresh(); 
 	getmaxyx(stdscr, MAX_Y, MAX_X); 
+	
 	// Print status bar 
 	attron(COLOR_PAIR(1)); 
 	mvprintw(0,0, fileName.c_str()); 
 	mvprintw(0, fileName.length()," %i,%i L: %i", CURS_X, CURS_Y, LineBuffer.size()); 
 	attroff(COLOR_PAIR(1)); 
+
 	int z = 0; // A variable to keep track of where to print the lines 
 	for(unsigned int i = 0; i < LineBuffer.size(); i++){ 
 		// If the line is not in the specified area, skip it 
@@ -210,10 +232,14 @@ void updateScr(){
 		z++; // increment the position of lines 
 	} 
 } 
+// Get a file's lines
 void getFileLines(string& NAME){ 
-	string line; 
-	ifstream iFILE; 
-	iFILE.open(NAME.c_str()); // Open the file stream 
+	
+	string line; 				// Buffer for the line
+	
+	ifstream iFILE; 			// 
+	iFILE.open(NAME.c_str()); 	// Open the file stream 
+	
 	// Write the file line-by-line to the LineBuffer 
 	bool firstline = true; 
 	while(getline(iFILE, line)){ 
@@ -225,15 +251,18 @@ void getFileLines(string& NAME){
 		LineBuffer.push_back(line+" "); // Append every line to the LineBuffer 
 		} 
 	} 
-	iFILE.close(); // Close file stream 
+	iFILE.close(); 				// Close file stream 
 } 
+// Get the location of the textSoup source directory
 void getLocation(){ 
-	ifstream iFILE("/etc/textSoup/location"); 
+	
+	ifstream iFILE("/etc/textSoup/location");	// File that contains the absolute path to the source directory
+	// Check file's conditions
 	if(iFILE.good()){ 
 		getline(iFILE, location); 
 	}else{ 
 	// TODO: some error message 
 	cout << "fuck all happened" << endl; 
 	} 
-	iFILE.close(); 
+	iFILE.close();				// Close the file stream
 } 
