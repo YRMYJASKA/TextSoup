@@ -14,10 +14,10 @@
 */
 
 // lines.cpp
-#include <ncurses.h>
-#include <string.h>
 #include <fstream>
 #include <iostream>
+#include <ncurses.h>
+#include <string.h>
 #include <vector>
 
 #include "files.h"
@@ -25,19 +25,19 @@
 using namespace std;
 
 // Write the current LineBuffer to a file
-void writeToFile(string& NAME, vector<string> lines) {
+void writeToFile(string &NAME, vector<string> lines) {
 	ofstream oFILE;
-	oFILE.open(NAME.c_str());  // Open the file for writing
-	for (unsigned int y = 0; y < lines.size(); y++)  // Write the given
-							 // buffer line-by-line
-							 // to the destination
-							 // file
+	oFILE.open(NAME.c_str()); // Open the file for writing
+
+	// Write the given line buffer into the file
+	for (unsigned int y = 0; y < lines.size(); y++) {
 		oFILE << lines[y].substr(0, lines[y].length()) << endl;
-	oFILE.close();  // close the file after we are done
+	}
+	oFILE.close(); // close the file after we are done
 }
 
 // Check if a file exists
-bool fileExists(string& NAME) {
+bool fileExists(string &NAME) {
 	// Pretty self-explanatory...
 	ifstream file(NAME.c_str());
 	return file.good();
