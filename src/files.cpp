@@ -31,7 +31,7 @@ void writeToFile(string &NAME, vector<string> lines) {
 
 	// Write the given line buffer into the file
 	for (unsigned int y = 0; y < lines.size(); y++) {
-		oFILE << lines[y].substr(0, lines[y].length()) << endl;
+		oFILE << lines[y].substr(0, lines[y].length() - 1) << endl;
 	}
 	oFILE.close(); // close the file after we are done
 }
@@ -51,4 +51,18 @@ void printFile(string NAME) {
 		cout << line << endl;
 	}
 	iFILE.close();
+}
+// Get a file's lines
+vector<string> getFileLines(string &NAME) {
+	string line;	  // Buffer for the line
+	vector<string> lines; // A buffer for the lines
+	ifstream iFILE;
+	iFILE.open(NAME.c_str()); // Open the file stream
+
+	// Write the file line-by-line to the lines variable
+	while (getline(iFILE, line)) {
+		lines.push_back(line + " "); // Append every line to the LineBuffer
+	}
+	iFILE.close(); // Close file stream
+	return lines;
 }

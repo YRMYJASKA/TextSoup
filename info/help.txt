@@ -8,5 +8,6 @@ textSoup [file name | --help | --license | --version]
 
 Controls:
 	
-	<Ctrl>Q : Exit program (or dialog)
+	<Ctrl>Q : Exit program 
 	<Ctrl>S : Save the current buffer into the file name specified at startup
+	<Ctrl>C : Exit a choice or prompt (eg. whilst saving you can press <Ctrl>C to cancel it)

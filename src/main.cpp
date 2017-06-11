@@ -36,6 +36,8 @@ vector<string> LineBuffer(1);	// the buffer that stores the lines
 bool running = true;		     // Boolean to determine if the program is running
 unsigned int lineArea = 0;	   // Used to declare the area to draw the lines in
 string location;		     // TextSoup's direcotry location
+string messageBar = "";
+MsgBarStatus MessageBarStatus = CLEAR;
 
 int main(int count, char *option[]) {
 	// Get the location of the source code
@@ -44,11 +46,11 @@ int main(int count, char *option[]) {
 
 	// Add the cursor buffer to the first line
 	LineBuffer[0] = " ";
-
 	// If there was an file name inputted
 	if (count > 1) {
+		// TODO: refactor as a switch statement
 		if (!strcmp(option[1], "--version")) {
-			cout << "Current version of TextSoup is v1.0.0" << endl;
+			cout << "Current version of TextSoup is v1.1.0" << endl;
 			return 0;
 		} else if (!strcmp(option[1], "--help")) {
 			printFile(location + "/info/help.txt");
@@ -62,8 +64,9 @@ int main(int count, char *option[]) {
 	} else {
 		fileName = "Untitled";
 	}
+
 	if (ifstream(fileName)) {
-		getFileLines(fileName);
+		LineBuffer = getFileLines(fileName);
 	}
 
 	// Initializing the curses session
@@ -81,119 +84,123 @@ int main(int count, char *option[]) {
 	while (running) {
 		// Update
 		updateScr();
+		// If there is MessageBarStatus to handle (eg. save, exit)
+		if (MessageBarStatus != CLEAR) {
+			handleMsgBar(MessageBarStatus);
+		} else {
+			// If no MessageBarStatus to handle carry on business as usual
 
-		key = getch(); // Fetch keypress
-		// Process the keypress...
-		switch (key) {
-		// Exit (^Q)
-		case 17:
-			running = false;
-			break;
+			// Fetch keypress
+			key = getch();
+			// Process the keypress...
+			switch (key) {
+			// Exit (^Q)
+			case Q:
+				MessageBarStatus = EXIT;
+				break;
 
-		// Save (^S)
-		case 19:
-			writeToFile(fileName, LineBuffer);
-			break;
+			// Save (^S)
+			case S:
+				MessageBarStatus = SAVE;
+				break;
 
-		// Backspace
-		case 127:
-		case KEY_BACKSPACE:
-			// if the cursor is at the start of a line
-			if (CURS_X > 0) {
-				// Delete the character before the
-				// cursor
-				LineBuffer[CURS_Y].erase(CURS_X - 1, 1);
-				CURS_X--;
-			} else {
-				// Delete the line and change the one
-				// above the cursor
-				if (CURS_Y > 0) {
-					LineBuffer[CURS_Y - 1].pop_back();
-					CURS_X = LineBuffer[CURS_Y - 1].length();
-					LineBuffer[CURS_Y - 1] += LineBuffer[CURS_Y];
-					LineBuffer.erase(LineBuffer.begin() + CURS_Y);
-					CURS_Y--; // Change to the line
-					// above
+			// Backspace
+			case 127:
+			case KEY_BACKSPACE:
+				// if the cursor is at the start of a line
+				if (CURS_X > 0) {
+					// Delete the character before the cursor
+					LineBuffer[CURS_Y].erase(CURS_X - 1, 1);
+					CURS_X--;
+				} else {
+					// Delete the line and change the one above the cursor
+					if (CURS_Y > 0) {
+						LineBuffer[CURS_Y - 1].pop_back();
+						CURS_X = LineBuffer[CURS_Y - 1].length();
+						LineBuffer[CURS_Y - 1] += LineBuffer[CURS_Y];
+						LineBuffer.erase(LineBuffer.begin() + CURS_Y);
+						CURS_Y--; // Change to the line above
 
-					if (CURS_Y < lineArea && lineArea > 0)
-						lineArea--;
+						if (CURS_Y < lineArea && lineArea > 0)
+							lineArea--;
+					}
 				}
-			}
 
-			break;
+				break;
 
-		// Enter
-		case int('\n'):
-			// Add the text on te rights side of the cursor
-			// to the new line below
-			LineBuffer.insert(LineBuffer.begin() + CURS_Y + 1, LineBuffer[CURS_Y].substr(CURS_X, LineBuffer[CURS_Y].length()));
+			// Enter
+			case ENTER:
+				// Add the text on te rights side of the cursor
+				// to the new line below
+				LineBuffer.insert(LineBuffer.begin() + CURS_Y + 1, LineBuffer[CURS_Y].substr(CURS_X, LineBuffer[CURS_Y].length()));
 
-			// Erase the right side from the previous line
-			LineBuffer[CURS_Y].erase(CURS_X, LineBuffer[CURS_Y].length() - 1);
+				// Erase the right side from the previous line
+				LineBuffer[CURS_Y].erase(CURS_X, LineBuffer[CURS_Y].length() - 1);
 
-			// If the last line didnt have a cursor buffer
-			if (LineBuffer[CURS_Y].back() != ' ') {
-				LineBuffer[CURS_Y] += ' '; // Add the cursor buffer to line
-			}
-
-			// Set correct  Y and X values
-			CURS_Y++;
-			if (CURS_Y >= MAX_Y - TOP_PADDING + lineArea) {
-				lineArea++;
-			}
-			CURS_X = 0;
-			break;
-
-		// Arrow keys
-		case KEY_LEFT:
-			if (CURS_X != 0) {
-				CURS_X--;
-			}
-
-			break;
-		case KEY_RIGHT:
-			if (CURS_X < LineBuffer[CURS_Y].length() - 1) {
-				CURS_X++;
-			}
-
-			break;
-		case KEY_UP:
-			if (CURS_Y != 0) {
-				CURS_Y--;
-				if (CURS_X + 1 >= LineBuffer[CURS_Y].length()) {
-					CURS_X = LineBuffer[CURS_Y].length() - 1;
+				// If the last line didnt have a cursor buffer
+				if (LineBuffer[CURS_Y].back() != ' ') {
+					LineBuffer[CURS_Y] += ' '; // Add the cursor buffer to line
 				}
-				if (CURS_Y < lineArea && lineArea > 0) {
-					lineArea--;
-				}
-			}
-			break;
-		case KEY_DOWN:
-			if (CURS_Y + 1 < LineBuffer.size()) {
+
+				// Set correct  Y and X values
 				CURS_Y++;
-				if (CURS_X + 1 >= LineBuffer[CURS_Y].length()) {
-					CURS_X = LineBuffer[CURS_Y].length() - 1;
-				}
 				if (CURS_Y >= MAX_Y - TOP_PADDING + lineArea) {
 					lineArea++;
 				}
-			}
-			break;
+				CURS_X = 0;
+				break;
 
-		// TAB key
-		case 9:
-			for (int i = 0; i < 4; i++) {
-				LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin() + CURS_X, char(' '));
+			// Arrow keys
+			case KEY_LEFT:
+				if (CURS_X != 0) {
+					CURS_X--;
+				}
+
+				break;
+			case KEY_RIGHT:
+				if (CURS_X < LineBuffer[CURS_Y].length() - 1) {
+					CURS_X++;
+				}
+
+				break;
+			case KEY_UP:
+				if (CURS_Y != 0) {
+					CURS_Y--;
+					if (CURS_X + 1 >= LineBuffer[CURS_Y].length()) {
+						CURS_X = LineBuffer[CURS_Y].length() - 1;
+					}
+					if (CURS_Y < lineArea && lineArea > 0) {
+						lineArea--;
+					}
+				}
+				break;
+			case KEY_DOWN:
+				if (CURS_Y + 1 < LineBuffer.size()) {
+					CURS_Y++;
+					if (CURS_X + 1 >= LineBuffer[CURS_Y].length()) {
+						CURS_X = LineBuffer[CURS_Y].length() - 1;
+					}
+					if (CURS_Y >= MAX_Y - TOP_PADDING + lineArea) {
+						lineArea++;
+					}
+				}
+				break;
+
+			// TAB key
+			case 9:
+				for (int i = 0; i < 4; i++) {
+					LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin() + CURS_X, char(' '));
+					CURS_X += 1;
+				}
+				break;
+
+			// Add the keypress to the current line if a regular
+			// keypress
+			default:
+				LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin() + CURS_X, char(key));
 				CURS_X += 1;
+				break;
 			}
-			break;
-
-		// Add the keypress to the current line if a regular
-		// keypress
-		default:
-			LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin() + CURS_X, char(key));
-			CURS_X += 1;
-			break;
 		}
 		// Clear the screen to draw the screen correctly
 		clear();
@@ -212,6 +219,8 @@ void updateScr() {
 	attron(COLOR_PAIR(1));
 	mvprintw(0, 0, fileName.c_str());
 	mvprintw(0, fileName.length(), " %i,%i L: %i", CURS_X, CURS_Y, LineBuffer.size());
+	// Message bar (for various uses)
+	mvprintw(1, 0, messageBar.c_str());
 	attroff(COLOR_PAIR(1));
 
 	int z = 0; // A variable to keep track of where to print the lines
@@ -244,26 +253,7 @@ void updateScr() {
 		z++; // increment the position of lines
 	}
 }
-// Get a file's lines
-void getFileLines(string &NAME) {
-	string line; // Buffer for the line
 
-	ifstream iFILE;
-	iFILE.open(NAME.c_str()); // Open the file stream
-
-	// Write the file line-by-line to the LineBuffer
-	bool firstline = true;
-	while (getline(iFILE, line)) {
-		if (firstline) {
-			LineBuffer[0] = line; // if the first line avoid the
-					      // bug of an extra line
-			firstline = false;
-		} else {
-			LineBuffer.push_back(line + " "); // Append every line to the LineBuffer
-		}
-	}
-	iFILE.close(); // Close file stream
-}
 // Get the location of the textSoup source directory
 void getLocation() {
 	// File that contains the absolute path to the source directory
@@ -278,4 +268,97 @@ void getLocation() {
 	}
 
 	iFILE.close(); // Close the file stream
+}
+// Handle the message bar's status
+void handleMsgBar(MsgBarStatus status) {
+	switch (status) {
+	// Get the file's name to write to
+	case SAVE: {
+		// initalize the message bar
+		messageBar = "File name: " + fileName;
+
+		updateScr();
+		// Sub routine loop
+		bool subRunning = true;
+		string fileNameBuffer = fileName;
+		while (subRunning) {
+			updateScr();
+			key = getch();
+			switch (key) {
+			// Backspace
+			case 127:
+			case KEY_BACKSPACE:
+				// Delete the last character of the file name buffer
+				if (fileNameBuffer.length() > 0) {
+					fileNameBuffer.pop_back();
+				}
+				break;
+			// Quit dialog (^Q)
+			case C:
+				subRunning = false;
+				break;
+			// Enter
+			case ENTER:
+				// set the file name to be the filename buffer
+				fileName = fileNameBuffer;
+				// Save the text to the given file name
+				writeToFile(fileName, LineBuffer);
+				subRunning = false;
+				break;
+			default:
+				fileNameBuffer += key;
+			}
+			messageBar = "File name:" + fileNameBuffer;
+			clear();
+		}
+
+		// Reset the message bar
+		messageBar = "";
+		MessageBarStatus = CLEAR;
+		break;
+	}
+	case OPEN:
+		// TODO
+		// Reset the message bar
+		messageBar = "";
+		MessageBarStatus = CLEAR;
+		break;
+	case EXIT: {
+		if (LineBuffer != getFileLines(fileName)) {
+			messageBar = "Save changes before you exit? (Y/n)";
+			updateScr();
+			bool subRunning = true;
+			while (subRunning) {
+				key = getch();
+				switch (key) {
+				case 121:
+				case ENTER:
+					// Print the lineBuffer into the file
+					// before exiting if 'y' or enter is pressed
+					writeToFile(fileName, LineBuffer);
+					subRunning = false;
+					running = false;
+					break;
+				case Q:
+				case 110:
+					// if 'n' or ^Q is pressed don't save before exit
+					subRunning = false;
+					running = false;
+					break;
+				case C:
+					// ^C  was pressed which means cancel the dialog
+					subRunning = false;
+					break;
+				}
+			}
+		} else {
+			running = false;
+		}
+		break;
+	}
+	case CLEAR:
+	default:
+		// not supposed to happen. Invalid value set
+		cout << "Error" << endl;
+	}
 }

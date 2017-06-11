@@ -29,6 +29,7 @@ Then build the program using make
 
 # TODO:
 ### URGENT:
+* <Ctrl>C doesn't actually quit the exit dialog 
 * Tab support and automatic indenting
 	* Now you can press tab to append 4 sapces into a string, but still doesn't work well with actual tabs
 	* Find out how to count how many spaces in front of a string to make automatic indenting
@@ -42,7 +43,6 @@ Then build the program using make
 	* Python
 	* (More languages)
 * Search function
-* Save to a different file
 * Config file (.souprc)
 # Copyright
 Copyright (C) 2017 Jyry Hjelt
