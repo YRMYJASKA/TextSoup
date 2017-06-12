@@ -25,25 +25,5 @@ Add the textSoup directory to the PATH environment variable and generate config 
 
 Then build the program using make
 
-# Usage
-
-# TODO:
-### URGENT:
-* When opening a completely empty file the prgram has an segmentation fault 
-* <Ctrl>C doesn't actually quit the exit dialog 
-* Tab support and automatic indenting
-	* Now you can press tab to append 4 sapces into a string, but still doesn't work well with actual tabs
-	* Find out how to count how many spaces in front of a string to make automatic indenting
-### POLISH:
-* Add multi-threading for the update routine to stop the flickering
-* Fix .travis.yml to build the project correctly in g++4.9+ **(or switch services)**
-### FEATURES:
-* Syntax highlighting
-	* C++
-	* C
-	* Python
-	* (More languages)
-* Search function
-* Config file (.souprc)
 # Copyright
 Copyright (C) 2017 Jyry Hjelt
