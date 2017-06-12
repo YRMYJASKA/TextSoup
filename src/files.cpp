@@ -45,7 +45,7 @@ bool fileExists(string &NAME) {
 // Used to get the contents of files like help.txt
 void printFile(string NAME) {
 	string line;
-	ifstream iFILE(NAME);
+	ifstream iFILE(NAME.c_str());
 	while (iFILE) {
 		getline(iFILE, line);
 		cout << line << endl;

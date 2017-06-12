@@ -48,9 +48,9 @@ int main(int count, char *option[]) {
 	LineBuffer[0] = " ";
 	// If there was an file name inputted
 	if (count > 1) {
-		// TODO: refactor as a switch statement
+		// There must be a better way to write this
 		if (!strcmp(option[1], "--version")) {
-			cout << "Current version of TextSoup is v1.1.0" << endl;
+			cout << "Current version of TextSoup is v1.1.2" << endl;
 			return 0;
 		} else if (!strcmp(option[1], "--help")) {
 			printFile(location + "/info/help.txt");
@@ -65,7 +65,7 @@ int main(int count, char *option[]) {
 		fileName = "Untitled";
 	}
 
-	if (ifstream(fileName)) {
+	if (fileExists(fileName)) {
 		LineBuffer = getFileLines(fileName);
 	}
 
