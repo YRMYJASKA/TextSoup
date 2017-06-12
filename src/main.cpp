@@ -18,13 +18,14 @@
 #include <iostream>
 #include <ncurses.h>
 #include <stdlib.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <vector>
 
 #include "files.h"
+#include "logging.hpp"
 #include "main.h"
-
 using namespace std;
 
 // Important variables
@@ -42,7 +43,9 @@ MsgBarStatus MessageBarStatus = CLEAR;
 int main(int count, char *option[]) {
 	// Get the location of the source code
 	getLocation();
-	cout << location << endl;
+
+	// cout << location << endl;
+	Logging::logEntry("TextSoup starting up!", Logging::INFO);
 
 	// Add the cursor buffer to the first line
 	LineBuffer[0] = " ";
@@ -67,9 +70,12 @@ int main(int count, char *option[]) {
 
 	if (fileExists(fileName)) {
 		LineBuffer = getFileLines(fileName);
+		// Log the event
+		// string msg = "Loaded file (" + NAME + ")";
+		Logging::logEntry("Loaded file (" + fileName + ")", Logging::INFO);
 	}
 
-	// Initializing the curses session
+	Logging::logEntry("Initializing ncurses...", Logging::INFO);
 	initscr();
 	raw();
 	keypad(stdscr, TRUE);
@@ -186,7 +192,7 @@ int main(int count, char *option[]) {
 				}
 				break;
 
-			// TAB key
+			// TAB key (WIP)
 			case 9:
 				for (int i = 0; i < 4; i++) {
 					LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin() + CURS_X, char(' '));
@@ -194,8 +200,7 @@ int main(int count, char *option[]) {
 				}
 				break;
 
-			// Add the keypress to the current line if a regular
-			// keypress
+			// Add the keypress to the current line if a regular keypress
 			default:
 				LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin() + CURS_X, char(key));
 				CURS_X += 1;
@@ -207,7 +212,8 @@ int main(int count, char *option[]) {
 	}
 
 	// Terminate the program
-	endwin();
+	endwin();		  // End the ncurses session
+	Logging::logEndSession(); // Send the end message to the log file
 	return 0;
 }
 void updateScr() {
@@ -237,9 +243,7 @@ void updateScr() {
 				if (x == CURS_X) {
 					// Draw the cursor correctly
 					attron(COLOR_PAIR(1));
-					mvprintw(z + TOP_PADDING, x + LEFT_PADDING, "%c", LineBuffer[i].at(x)); // Draw the cursor to
-					// the correct
-					// position.
+					mvprintw(z + TOP_PADDING, x + LEFT_PADDING, "%c", LineBuffer[i].at(x));
 					attroff(COLOR_PAIR(1));
 				} else {
 					// Draw the regular character
@@ -263,8 +267,11 @@ void getLocation() {
 	if (iFILE.good()) {
 		getline(iFILE, location);
 	} else {
-		// TODO: some error message
-		cout << "fuck all happened" << endl;
+		// Panic and quit the program
+		cout << "No file found in /etc/textSoup!" << endl;
+		cout << "Exiting....." << endl;
+		cout << "Make sure you followed the installation correctly!" << endl;
+		exit(EXIT_FAILURE);
 	}
 
 	iFILE.close(); // Close the file stream
@@ -346,6 +353,7 @@ void handleMsgBar(MsgBarStatus status) {
 					running = false;
 					break;
 				case C:
+					// Not working for some reason
 					// ^C  was pressed which means cancel the dialog
 					subRunning = false;
 					break;
@@ -358,7 +366,7 @@ void handleMsgBar(MsgBarStatus status) {
 	}
 	case CLEAR:
 	default:
-		// not supposed to happen. Invalid value set
-		cout << "Error" << endl;
+		// not supposed to happen. Invalid value
+		break;
 	}
 }

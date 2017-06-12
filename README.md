@@ -29,6 +29,7 @@ Then build the program using make
 
 # TODO:
 ### URGENT:
+* When opening a completely empty file the prgram has an segmentation fault 
 * <Ctrl>C doesn't actually quit the exit dialog 
 * Tab support and automatic indenting
 	* Now you can press tab to append 4 sapces into a string, but still doesn't work well with actual tabs
