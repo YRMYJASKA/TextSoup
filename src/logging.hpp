@@ -10,7 +10,7 @@
 
 using namespace std;
 
-#define LOG_FILE "/etc/textSoup/logs/textsoup.log"
+#define LOG_FILE "/var/log/textsoup.log"
 
 namespace Logging {
 

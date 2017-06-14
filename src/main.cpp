@@ -267,10 +267,17 @@ void updateScr() {
 void getLocation() {
 	// File that contains the absolute path to the source directory
 	ifstream iFILE("/etc/textSoup/location");
+	Logging::logEntry("Trying to load location from /etc/textSoup/location", Logging::INFO);
 
 	// Check file's conditions
 	if (iFILE.good()) {
 		getline(iFILE, location);
+		if (location == "") {
+			Logging::logEntry("Empty location in /etc/textSoup/location! Check installation", Logging::FATAL);
+			cout << "Empty location! Check Logs!" << endl;
+			exit(EXIT_FAILURE);
+		}
+		Logging::logEntry("Location: " + location, Logging::INFO);
 	} else {
 		// Panic and quit the program
 		cout << "No file found in /etc/textSoup!" << endl;
