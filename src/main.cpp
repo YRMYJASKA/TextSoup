@@ -53,14 +53,14 @@ int main(int count, char *option[]) {
 	if (count > 1) {
 		// There must be a better way to write this
 		if (!strcmp(option[1], "--version")) {
-			cout << "Current version of TextSoup is v1.1.2" << endl;
-			return 0;
+			cout << "Current version of TextSoup is v1.2.5" << endl;
+			exit(EXIT_SUCCESS);
 		} else if (!strcmp(option[1], "--help")) {
 			printFile(location + "/info/help.txt");
-			return 0;
+			exit(EXIT_SUCCESS);
 		} else if (!strcmp(option[1], "--license")) {
 			printFile(location + "/LICENSE");
-			return 0;
+			exit(EXIT_SUCCESS);
 		} else {
 			fileName = option[1];
 		}
@@ -81,6 +81,7 @@ int main(int count, char *option[]) {
 	}
 
 	Logging::logEntry("Initializing ncurses...", Logging::INFO);
+
 	initscr();
 	raw();
 	keypad(stdscr, TRUE);
@@ -327,7 +328,7 @@ void handleMsgBar(MsgBarStatus status) {
 			default:
 				fileNameBuffer += key;
 			}
-			messageBar = "File name:" + fileNameBuffer;
+			messageBar = "File name: " + fileNameBuffer;
 			clear();
 		}
 
