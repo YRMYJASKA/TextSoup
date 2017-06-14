@@ -72,7 +72,12 @@ int main(int count, char *option[]) {
 		LineBuffer = getFileLines(fileName);
 		// Log the event
 		// string msg = "Loaded file (" + NAME + ")";
-		Logging::logEntry("Loaded file (" + fileName + ")", Logging::INFO);
+		Logging::logEntry("Loaded file (" + fileName + ")\n \t\t\t Lines: " + to_string(LineBuffer.size()), Logging::INFO);
+
+		// If the file is empty add a line to prevent segFaults
+		if (LineBuffer.size() < 1) {
+			LineBuffer.push_back(" ");
+		}
 	}
 
 	Logging::logEntry("Initializing ncurses...", Logging::INFO);
