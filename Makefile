@@ -20,10 +20,10 @@ install:
 	mkdir /etc/textSoup
 	echo "$(shell pwd)" > /etc/textSoup/location
 
-	# Logs in /var/log/
-	touch /var/log/textsoup.log
+	# Logs in /etc/textSoup
+	touch /etc/textSoup/textsoup.log
 	# Make the log file writeable
-	chmod 666 /var/log/textsoup.log
+	chmod 666 /etc/textSoup/textsoup.log
 uninstall:
 	# Run with sudo
 	
@@ -31,7 +31,11 @@ uninstall:
 	
 	rm -r /etc/textSoup/ 
 	
-	rm /var/log/textsoup.log
-	
 	echo "Remember to remove PATH exports in your profile files!"
-
+clean:
+	# Clean the binary directory 
+	rm bin/*
+	
+	# Clear the logs
+	echo " " > /etc/textSoup/textsoup.log
+	

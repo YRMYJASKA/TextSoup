@@ -7,13 +7,11 @@
 #include <iostream>
 #include <string>
 
-
 using namespace std;
 
-#define LOG_FILE "/var/log/textsoup.log"
+#define LOG_FILE "/etc/textSoup/textsoup.log"
 
 namespace Logging {
-
 
 enum ErrType { WARN, FATAL, NOTE, INFO };
 
@@ -41,7 +39,7 @@ inline void logEntry(string entry, Logging::ErrType type, string location = LOG_
 	// Get the string format of the error type
 	string type_str = "[" + getErrorStr(type) + "] ";
 
-	// Open the file for appending 
+	// Open the file for appending
 	outfile.open(location, ios_base::app | ios_base::out);
 
 	// Put the log entry together
@@ -54,7 +52,7 @@ inline void logEntry(string entry, Logging::ErrType type, string location = LOG_
 // Print a 'end of session' statement to clearly distinguish sessions
 inline void logEndSession(string location = LOG_FILE) {
 	ofstream outfile;
-	
+
 	outfile.open(location, ios_base::app | ios_base::out);
 
 	outfile << "----------END OF SESSION----------" << endl;
