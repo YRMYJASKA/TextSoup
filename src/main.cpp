@@ -26,6 +26,7 @@
 #include "files.h"
 #include "logging.hpp"
 #include "main.h"
+
 using namespace std;
 
 // Important variables
@@ -71,7 +72,6 @@ int main(int count, char *option[]) {
 	if (fileExists(fileName)) {
 		LineBuffer = getFileLines(fileName);
 		// Log the event
-		// string msg = "Loaded file (" + NAME + ")";
 		Logging::logEntry("Loaded file (" + fileName + ")\n \t\t\t Lines: " + to_string(LineBuffer.size()), Logging::INFO);
 
 		// If the file is empty add a line to prevent segFaults
@@ -82,6 +82,7 @@ int main(int count, char *option[]) {
 
 	Logging::logEntry("Initializing ncurses...", Logging::INFO);
 
+	// Initializing ncurses...
 	initscr();
 	raw();
 	keypad(stdscr, TRUE);
@@ -96,6 +97,7 @@ int main(int count, char *option[]) {
 	while (running) {
 		// Update
 		updateScr();
+
 		// If there is MessageBarStatus to handle (eg. save, exit)
 		if (MessageBarStatus != CLEAR) {
 			handleMsgBar(MessageBarStatus);
@@ -104,6 +106,7 @@ int main(int count, char *option[]) {
 
 			// Fetch keypress
 			key = getch();
+
 			// Process the keypress...
 			switch (key) {
 			// Exit (^Q)
@@ -137,7 +140,6 @@ int main(int count, char *option[]) {
 							lineArea--;
 					}
 				}
-
 				break;
 
 			// Enter
@@ -160,6 +162,13 @@ int main(int count, char *option[]) {
 					lineArea++;
 				}
 				CURS_X = 0;
+
+				// Auto Indentation
+				for (int i = 0; i < spacesLastLine(CURS_Y); i++) {
+					LineBuffer[CURS_Y].insert(LineBuffer[CURS_Y].begin() + CURS_X, char(' '));
+					CURS_X += 1;
+				}
+
 				break;
 
 			// Arrow keys
@@ -167,13 +176,11 @@ int main(int count, char *option[]) {
 				if (CURS_X != 0) {
 					CURS_X--;
 				}
-
 				break;
 			case KEY_RIGHT:
 				if (CURS_X < LineBuffer[CURS_Y].length() - 1) {
 					CURS_X++;
 				}
-
 				break;
 			case KEY_UP:
 				if (CURS_Y != 0) {
@@ -382,4 +389,19 @@ void handleMsgBar(MsgBarStatus status) {
 		// not supposed to happen. Invalid value
 		break;
 	}
+}
+// Returns how many spaces were in front of the last line
+int spacesLastLine(int y) {
+	int counter = 0;
+	string line = LineBuffer[y - 1].substr(0, LineBuffer[y - 1].length() - 1);
+
+	for (unsigned int i = 0; i < line.length(); i++) {
+		if (line.at(i) == ' ') {
+			counter++;
+		} else {
+			break;
+		}
+	}
+
+	return counter;
 }

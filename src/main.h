@@ -20,5 +20,5 @@ enum MsgBarStatus { SAVE, OPEN, EXIT, CLEAR };
 void updateScr();    // Updating the screen
 void getLocation();  // Get the location of source code
 void handleMsgBar(MsgBarStatus status); // Handle the message bar's prompt
-
+int spacesLastLine(int y);
 #endif // MAIN_H
