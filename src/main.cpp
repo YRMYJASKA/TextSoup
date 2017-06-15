@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <vector>
 
-#include "files.h"
+#include "files.hpp"
 #include "logging.hpp"
 #include "main.h"
 
@@ -33,11 +33,14 @@ using namespace std;
 unsigned int MAX_X = 0, MAX_Y = 0;   // Window's current dimensions
 unsigned int CURS_X = 0, CURS_Y = 0; // Cursor's position
 int key = 0;			     // The value of the key presses is stored into 'int key'
-string fileName = "";		     // Name of the file
-vector<string> LineBuffer(1);	// the buffer that stores the lines
-bool running = true;		     // Boolean to determine if the program is running
-unsigned int lineArea = 0;	   // Used to declare the area to draw the lines in
-string location;		     // TextSoup's direcotry location
+
+string fileName = "";	 // Name of the file
+vector<string> LineBuffer(1); // the buffer that stores the lines
+bool running = true;	  // Boolean to determine if the program is running
+unsigned int lineArea = 0;    // Used to declare the area to draw the lines in
+
+string location; // TextSoup's direcotry location
+
 string messageBar = "";
 MsgBarStatus MessageBarStatus = CLEAR;
 
@@ -50,6 +53,7 @@ int main(int count, char *option[]) {
 
 	// Add the cursor buffer to the first line
 	LineBuffer[0] = " ";
+
 	// If there was an file name inputted
 	if (count > 1) {
 		// There must be a better way to write this
@@ -248,10 +252,10 @@ void updateScr() {
 		if (i < lineArea) {
 			continue;
 		}
+
 		// If it is, draw it
 		mvprintw(z + TOP_PADDING, 0, "%d", i + 1);
-		if (i == CURS_Y) { // If this line has te cursor on it draa it
-				   // char-by-char
+		if (i == CURS_Y) { // If this line has the cursor on it draw it char-by-char
 			for (unsigned int x = 0; x < LineBuffer[i].length(); x++) {
 				if (x == CURS_X) {
 					// Draw the cursor correctly
@@ -305,6 +309,7 @@ void handleMsgBar(MsgBarStatus status) {
 		messageBar = "File name: " + fileName;
 
 		updateScr();
+
 		// Sub routine loop
 		bool subRunning = true;
 		string fileNameBuffer = fileName;

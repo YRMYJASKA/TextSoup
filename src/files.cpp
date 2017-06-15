@@ -12,15 +12,16 @@
 *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *    GNU General Public License for more details.
 */
-
 // lines.cpp
+
+// Include the libraries
 #include <fstream>
 #include <iostream>
 #include <ncurses.h>
 #include <string.h>
 #include <vector>
 
-#include "files.h"
+#include "files.hpp"
 #include "logging.hpp"
 
 using namespace std;
@@ -47,6 +48,7 @@ bool fileExists(string &NAME) {
 	ifstream file(NAME.c_str());
 	return file.good();
 }
+
 // Used to get the contents of files like help.txt
 void printFile(string NAME) {
 	string line;
@@ -62,6 +64,7 @@ void printFile(string NAME) {
 	string msg = "Printed file to terminal. (" + NAME + ")";
 	Logging::logEntry(msg, Logging::INFO);
 }
+
 // Get a file's lines
 vector<string> getFileLines(string &NAME) {
 	string line;	  // Buffer for the line
@@ -74,7 +77,6 @@ vector<string> getFileLines(string &NAME) {
 		lines.push_back(line + " "); // Append every line to the LineBuffer
 	}
 	infile.close(); // Close file stream
-
 
 	return lines;
 }

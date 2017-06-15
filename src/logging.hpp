@@ -1,18 +1,21 @@
+// logging.hpp
 #ifndef LOGGING_H
 #define LOGGING_H
+
 // Logging header for the textSoup text editor
 #include <ctime>
 #include <fstream>
 #include <iomanip>
-#include <iostream>
 #include <string>
 
 using namespace std;
 
+// The log file location
 #define LOG_FILE "/etc/textSoup/textsoup.log"
 
 namespace Logging {
 
+// Error types for a log entry
 enum ErrType { WARN, FATAL, NOTE, INFO };
 
 // Returns the string equivalent to the ErrType enum
@@ -59,6 +62,5 @@ inline void logEndSession(string location = LOG_FILE) {
 
 	outfile.close();
 }
-
 } // Logging
 #endif // LOGGING_H
