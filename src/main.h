@@ -10,6 +10,7 @@
 #define Q 17
 #define S 19
 #define C 3
+#define O 15
 #define ENTER int('\n')
 
 // Enum for the message bar's status

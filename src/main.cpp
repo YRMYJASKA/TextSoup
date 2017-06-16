@@ -174,7 +174,10 @@ int main(int count, char *option[]) {
 				}
 
 				break;
-
+			// Open a file
+			case O:
+				MessageBarStatus = OPEN;
+				break;
 			// Arrow keys
 			case KEY_LEFT:
 				if (CURS_X != 0) {
@@ -303,7 +306,7 @@ void getLocation() {
 // Handle the message bar's status
 void handleMsgBar(MsgBarStatus status) {
 	switch (status) {
-	// Get the file's name to write to
+	// Save to a file
 	case SAVE: {
 		// initalize the message bar
 		messageBar = "File name: " + fileName;
@@ -349,12 +352,50 @@ void handleMsgBar(MsgBarStatus status) {
 		MessageBarStatus = CLEAR;
 		break;
 	}
-	case OPEN:
-		// TODO
+	// Open a file by certain name
+	case OPEN: {
+		// Initialize the screen and messagebar
+		messageBar = "File to open: ";
+		updateScr();
+
+		bool subRunning = true;
+		string fileNameBuffer = "";
+		while (subRunning) {
+			updateScr();
+			key = getch();
+			switch (key) {
+			// Backspace
+			case 127:
+			case KEY_BACKSPACE:
+				// Delete the last character of the file name buffer
+				if (fileNameBuffer.length() > 0) {
+					fileNameBuffer.pop_back();
+				}
+				break;
+			// Quit dialog (^Q)
+			case C:
+				subRunning = false;
+				break;
+			// Enter
+			case ENTER:
+				fileName = fileNameBuffer;
+
+				// Open the file
+				LineBuffer = getFileLines(fileName);
+
+				subRunning = false;
+				break;
+			default:
+				fileNameBuffer += key;
+			}
+			messageBar = "File name: " + fileNameBuffer;
+			clear();
+		}
 		// Reset the message bar
 		messageBar = "";
 		MessageBarStatus = CLEAR;
 		break;
+	}
 	case EXIT: {
 		if (LineBuffer != getFileLines(fileName)) {
 			messageBar = "Save changes before you exit? (Y/n)";
