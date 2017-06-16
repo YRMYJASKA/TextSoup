@@ -383,6 +383,8 @@ void handleMsgBar(MsgBarStatus status) {
 				// Open the file
 				LineBuffer = getFileLines(fileName);
 
+				// Log the event
+				Logging::logEntry("Loaded file (" + fileName + ")\n \t\t\t Lines: " + to_string(LineBuffer.size()), Logging::INFO);
 				subRunning = false;
 				break;
 			default:
