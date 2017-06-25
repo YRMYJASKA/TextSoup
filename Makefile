@@ -1,7 +1,7 @@
 CC=g++
 SRC=src/main.cpp src/files.cpp
 FLAGS=-lncurses -Wall -Wpedantic -Wextra -std=c++11
-OUTPUT=bin/textSoup
+OUTPUT=bin/soup
 all:
 	$(CC) $(SRC) -o $(OUTPUT) $(FLAGS)
 install:
