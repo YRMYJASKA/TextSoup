@@ -25,7 +25,7 @@ Add the textSoup directory to the PATH environment variable and generate config 
 
 Then build the program using make
 # Usage
-``textSoup [file name | --help | --license | --version]``
+``soup [file name | --help | --license | --version]``
 
 	--help: Shows this message
 	--license: Shows the GPL license of this program (You run '| less' witht his command)
