@@ -3,7 +3,7 @@
 #define MAIN_H
 
 // Some constant values
-#define TOP_PADDING 2  // Padding to print the status bar
+#define TOP_PADDING 3  // Padding to print the status bar
 #define LEFT_PADDING 4 // Padding fo the line numbers
 
 // Define the control key values

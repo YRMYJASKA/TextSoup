@@ -248,7 +248,11 @@ void updateScr() {
 	// Message bar (for various uses)
 	mvprintw(1, 0, messageBar.c_str());
 	attroff(COLOR_PAIR(1));
-
+	// Horizontal line separating the main and top fields
+	mvprintw(2, 0, "");
+	for (int i = 0; i < MAX_X; i++) {
+		addch(ACS_HLINE);
+	}
 	int z = 0; // A variable to keep track of where to print the lines
 	for (unsigned int i = 0; i < LineBuffer.size(); i++) {
 		// If the line is not in the specified area, skip it
