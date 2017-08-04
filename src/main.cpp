@@ -103,6 +103,7 @@ int main(int count, char *option[]) {
 		updateScr();
 
 		// If there is MessageBarStatus to handle (eg. save, exit)
+		// REWRITE: This could be without an if statement if nothing happens in the case of clear in handleMsgBar
 		if (MessageBarStatus != CLEAR) {
 			handleMsgBar(MessageBarStatus);
 		} else {
@@ -117,7 +118,10 @@ int main(int count, char *option[]) {
 			case Q:
 				MessageBarStatus = EXIT;
 				break;
-
+			// Find (^F)
+			case F:
+				MessageBarStatus = FIND;
+				break;
 			// Save (^S)
 			case S:
 				MessageBarStatus = SAVE;
@@ -248,9 +252,10 @@ void updateScr() {
 	// Message bar (for various uses)
 	mvprintw(1, 0, messageBar.c_str());
 	attroff(COLOR_PAIR(1));
+
 	// Horizontal line separating the main and top fields
 	mvprintw(2, 0, "");
-	for (int i = 0; i < MAX_X; i++) {
+	for (unsigned int i = 0; i < MAX_X; i++) {
 		addch(ACS_HLINE);
 	}
 	int z = 0; // A variable to keep track of where to print the lines
@@ -404,9 +409,9 @@ void handleMsgBar(MsgBarStatus status) {
 	}
 	case EXIT: {
 		if (LineBuffer != getFileLines(fileName)) {
+			bool subRunning = true;
 			messageBar = "Save changes before you exit? (Y/n)";
 			updateScr();
-			bool subRunning = true;
 			while (subRunning) {
 				key = getch();
 				switch (key) {
@@ -434,6 +439,84 @@ void handleMsgBar(MsgBarStatus status) {
 		} else {
 			running = false;
 		}
+
+		messageBar = "";
+		MessageBarStatus = CLEAR;
+		break;
+	}
+	case FIND: {
+		// TODO: make it better, in every way
+		messageBar = "Find?: ";
+		updateScr();
+
+		// Local varibales
+		bool subRunning = true;
+		string stringToFind = "";
+		int currentHit = 0;
+
+		// Save the last start position of the cursor in case of cancel
+		int StartX = CURS_X;
+		int StartY = CURS_Y;
+
+		// Sub-routine for the find functionality
+		while (subRunning) {
+
+			updateScr();
+			key = getch();
+			switch (key) {
+
+			// Backspace
+			case 127:
+			case KEY_BACKSPACE:
+				// Delete the last character of the file name buffer
+				if (stringToFind.length() > 0) {
+					stringToFind.pop_back();
+				}
+				break;
+			// Quit dialog (^Q)
+			case C:
+				subRunning = false;
+				CURS_X = StartX;
+				CURS_Y = StartY;
+				break;
+			// Enter
+			case ENTER:
+				// ????
+				searchFile(stringToFind);
+				for (int i = 0; i < int(searchResults.size()); i++) {
+					cout << searchResults[i][0] << ", " << searchResults[i][1] << endl;
+				}
+				cout << "------" << endl;
+				// subRunning = false;
+				break;
+			// Increment the current search hit by 1
+			case KEY_RIGHT:
+				if (currentHit < int(searchResults.size() - 1)) {
+					currentHit++;
+				}
+				break;
+			// Decrease the current search hit by 1
+			case KEY_LEFT:
+				if (currentHit > 0) {
+					currentHit--;
+				}
+				break;
+			default:
+				stringToFind += key;
+			}
+
+			messageBar = "Find?: " + stringToFind;
+
+			searchFile(stringToFind);
+			if (searchResults.size() > 0) {
+				CURS_X = searchResults[currentHit][0];
+				CURS_Y = searchResults[currentHit][1];
+			}
+			clear();
+		}
+		// Reset the message bar
+		messageBar = "";
+		MessageBarStatus = CLEAR;
 		break;
 	}
 	case CLEAR:
@@ -442,12 +525,14 @@ void handleMsgBar(MsgBarStatus status) {
 		break;
 	}
 }
+
 // Returns how many spaces were in front of the last line
 int spacesLastLine(int y) {
 	int counter = 0;
-	string line = LineBuffer[y - 1].substr(0, LineBuffer[y - 1].length() - 1);
+	string line = LineBuffer[y - 1].substr(0, LineBuffer[y].length());
 
-	for (unsigned int i = 0; i < line.length(); i++) {
+	// Iterate over the string (disregarding the space buffer)
+	for (unsigned int i = 0; i < line.length() - 1; i++) {
 		if (line.at(i) == ' ') {
 			counter++;
 		} else {
@@ -456,4 +541,23 @@ int spacesLastLine(int y) {
 	}
 
 	return counter;
+}
+
+// Search a string in file and return results to variable searchResults (vector<vector<int>>)
+void searchFile(string s) {
+	vector<int> buff;
+	size_t found;
+
+	searchResults.clear();
+
+	for (unsigned int i = 0; i < LineBuffer.size(); i++) {
+		found = LineBuffer[i].find(s);
+		if (found != string::npos) {
+			// TODO: Add the x and y values of the found sting into searchResults
+			buff.push_back(int(found));
+			buff.push_back(i);
+
+			searchResults.push_back(buff);
+		}
+	}
 }
