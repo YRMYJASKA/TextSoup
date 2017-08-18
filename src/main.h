@@ -27,8 +27,8 @@ vector<vector<int>> searchResults;
 enum MsgBarStatus { SAVE, OPEN, EXIT, FIND, CLEAR };
 
 // General routines for the program
-void updateScr();			// Updating the screen
-void getLocation();			// Get the location of source code
+void updateScr();                       // Updating the screen
+void getLocation();                     // Get the location of source code
 void handleMsgBar(MsgBarStatus status); // Handle the message bar's prompt
 int spacesLastLine(int y);
 
