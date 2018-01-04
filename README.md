@@ -1,6 +1,6 @@
 # TextSoup 
 
-Yet another text editor
+WARNING: This editor is very bad and there is a better and newer editor being made currently
 
 
 # Installation:
